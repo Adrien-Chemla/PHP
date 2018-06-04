@@ -1,3 +1,5 @@
 <head>
-echo "Coucou";
+    <?php
+        
+    ?>
 </head>

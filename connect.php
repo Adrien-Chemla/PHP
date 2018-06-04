@@ -4,7 +4,7 @@ function db_connect() {
     try {
 
         $host = "localhost";
-        $dbname = "mabase";
+        $dbname = "comptable";
         $user = "root";
         $password = "root";
 
@@ -22,5 +22,7 @@ function db_connect() {
         die("Erreur : " . $e-> getMessage());
     }
 }
+
+db_connect();
 
 ?>

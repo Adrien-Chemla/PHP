@@ -1,0 +1,3 @@
+<head>
+echo "Coucou";
+</head>

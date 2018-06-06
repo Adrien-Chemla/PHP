@@ -1,6 +1,6 @@
 <head>
     <?php
-        require_once("connect.php");
+        require_once("connexion_database.php");
 
         $db = db_connect();
     ?>

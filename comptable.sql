@@ -2,32 +2,32 @@
 -- version 4.7.7
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Jun 04, 2018 at 01:51 PM
--- Server version: 5.6.38
--- PHP Version: 7.2.1
+-- Hôte : localhost:8889
+-- Généré le :  mer. 06 juin 2018 à 07:43
+-- Version du serveur :  5.6.38
+-- Version de PHP :  7.2.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 --
--- Database: `comptable`
+-- Base de données :  `comptable`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `category`
+-- Structure de la table `category`
 --
 
 CREATE TABLE `category` (
- `id` int(11) NOT NULL,
- `name` varchar(20) NOT NULL,
- `type` enum('debit','credit') NOT NULL
+  `id` int(11) NOT NULL,
+  `name` varchar(20) NOT NULL,
+  `type` enum('debit','credit') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data for table `category`
+-- Déchargement des données de la table `category`
 --
 
 INSERT INTO `category` (`id`, `name`, `type`) VALUES
@@ -45,85 +45,127 @@ INSERT INTO `category` (`id`, `name`, `type`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `compte_bancaire`
+-- Structure de la table `compte_bancaire`
 --
 
 CREATE TABLE `compte_bancaire` (
- `id` int(11) NOT NULL,
- `nom` varchar(25) NOT NULL,
- `type` enum('courant','épargne','compte_joint') NOT NULL,
- `solde` double(10,2) NOT NULL,
- `devise` enum('EUR','USD') NOT NULL
+  `id` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `nom` varchar(25) NOT NULL,
+  `type` enum('courant','epargne','joint') NOT NULL,
+  `solde` double(10,2) NOT NULL,
+  `devise` enum('EUR','USD') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `compte_operation`
+-- Structure de la table `compte_operation`
 --
 
 CREATE TABLE `compte_operation` (
- `id` int(11) NOT NULL,
- `id_compte` int(11) NOT NULL,
- `choix` int(11) NOT NULL,
- `operation` int(11) NOT NULL,
- `montant` double(10,2) NOT NULL,
- `categorie` int(11) NOT NULL,
- `mode_paiement` enum('CB','virement','chèques','prélèvement','') NOT NULL
+  `id` int(11) NOT NULL,
+  `id_compte` int(11) NOT NULL,
+  `choix` int(11) NOT NULL,
+  `operation` int(11) NOT NULL,
+  `montant` double(10,2) NOT NULL,
+  `categorie` int(11) NOT NULL,
+  `mode_paiement` enum('CB','virement','chèques','prélèvement','') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `user`
+--
+
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL,
+  `first_name` varchar(30) NOT NULL,
+  `last_name` varchar(30) NOT NULL,
+  `tel` int(10) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `password` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Indexes for dumped tables
+-- Déchargement des données de la table `user`
+--
+
+INSERT INTO `user` (`id`, `first_name`, `last_name`, `tel`, `email`, `password`) VALUES
+(8, 'Alek', 'Grbovic', 1020345345, 'skefgb@gmail.com', '1234');
+
+--
+-- Index pour les tables déchargées
 --
 
 --
--- Indexes for table `category`
+-- Index pour la table `category`
 --
 ALTER TABLE `category`
- ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `compte_bancaire`
+-- Index pour la table `compte_bancaire`
 --
 ALTER TABLE `compte_bancaire`
- ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_user` (`id_user`);
 
 --
--- Indexes for table `compte_operation`
+-- Index pour la table `compte_operation`
 --
 ALTER TABLE `compte_operation`
- ADD PRIMARY KEY (`id`),
- ADD KEY `id_compte` (`id_compte`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_compte` (`id_compte`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- Index pour la table `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT pour les tables déchargées
 --
 
 --
--- AUTO_INCREMENT for table `category`
+-- AUTO_INCREMENT pour la table `category`
 --
 ALTER TABLE `category`
- MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
--- AUTO_INCREMENT for table `compte_bancaire`
+-- AUTO_INCREMENT pour la table `compte_bancaire`
 --
 ALTER TABLE `compte_bancaire`
- MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `compte_operation`
+-- AUTO_INCREMENT pour la table `compte_operation`
 --
 ALTER TABLE `compte_operation`
- MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- Constraints for dumped tables
+-- AUTO_INCREMENT pour la table `user`
+--
+ALTER TABLE `user`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- Contraintes pour les tables déchargées
 --
 
 --
--- Constraints for table `compte_operation`
+-- Contraintes pour la table `compte_bancaire`
+--
+ALTER TABLE `compte_bancaire`
+  ADD CONSTRAINT `compte_bancaire_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+--
+-- Contraintes pour la table `compte_operation`
 --
 ALTER TABLE `compte_operation`
- ADD CONSTRAINT `compte_operation_ibfk_1` FOREIGN KEY (`id`) REFERENCES `compte_bancaire` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
- ADD CONSTRAINT `compte_operation_ibfk_2` FOREIGN KEY (`id_compte`) REFERENCES `category` (`id`);
+  ADD CONSTRAINT `compte_operation_ibfk_1` FOREIGN KEY (`id`) REFERENCES `compte_bancaire` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `compte_operation_ibfk_2` FOREIGN KEY (`id_compte`) REFERENCES `category` (`id`);

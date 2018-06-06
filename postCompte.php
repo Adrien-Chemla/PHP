@@ -1,5 +1,7 @@
 <?php
     require_once("header.php");
+
+    // Formulaire d'ajout de 10 comptes à la base de données
     $user = 8;
     $id = $db->prepare("SELECT COUNT(id) as count FROM compte_bancaire WHERE id_user = ?");
     $id->execute(array($user));
